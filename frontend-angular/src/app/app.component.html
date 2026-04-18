@@ -1,0 +1,40 @@
+<main class="page">
+  <h1>Rental & Land Sales</h1>
+  <p class="subhead">Angular UI ready for future Android conversion via Ionic + Capacitor.</p>
+
+  <section class="card">
+    <h2>Register interest</h2>
+
+    <form [formGroup]="leadForm" (ngSubmit)="onSubmit()">
+      <label>
+        Full name
+        <input formControlName="fullName" placeholder="Full name" />
+      </label>
+
+      <label>
+        Email
+        <input formControlName="email" type="email" placeholder="Email" />
+      </label>
+
+      <label>
+        Phone
+        <input formControlName="phone" placeholder="Phone" />
+      </label>
+
+      <label>
+        Role
+        <select formControlName="role">
+          <option value="buyer">Buyer</option>
+          <option value="seller">Seller</option>
+          <option value="agent">Agent</option>
+        </select>
+      </label>
+
+      <button type="submit">Save</button>
+    </form>
+
+    <p *ngIf="submitError" class="error">{{ submitError }}</p>
+
+    <pre *ngIf="submitResult">{{ submitResult | json }}</pre>
+  </section>
+</main>

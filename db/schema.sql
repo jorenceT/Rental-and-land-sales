@@ -1,0 +1,19 @@
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  full_name VARCHAR(120) NOT NULL,
+  email VARCHAR(160) UNIQUE NOT NULL,
+  phone VARCHAR(30),
+  role VARCHAR(30) NOT NULL DEFAULT 'buyer',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS listings (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(180) NOT NULL,
+  description TEXT,
+  listing_type VARCHAR(20) NOT NULL CHECK (listing_type IN ('rental', 'land_sale')),
+  price NUMERIC(12,2) NOT NULL,
+  location VARCHAR(160) NOT NULL,
+  owner_user_id INTEGER REFERENCES users(id),
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
