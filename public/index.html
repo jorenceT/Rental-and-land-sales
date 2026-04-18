@@ -3,10 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rental & Land Sales API</title>
+    <title>Rental & Land Sales</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 2rem; max-width: 700px; }
+      input, select, button { display:block; width:100%; margin:.5rem 0; padding:.6rem; }
+      .card { border:1px solid #ddd; border-radius:8px; padding:1rem; }
+    </style>
   </head>
   <body>
-    <h1>Rental & Land Sales API</h1>
-    <p>This server hosts API routes. Run the Angular UI from <code>frontend-angular/</code>.</p>
+    <h1>Rental & Land Sales (Initial MVP)</h1>
+    <p>This form sends user details to a Node.js API, which stores them in SQL.</p>
+
+    <div class="card">
+      <h2>Register interest</h2>
+      <form id="user-form">
+        <input id="fullName" placeholder="Full name" required />
+        <input id="email" type="email" placeholder="Email" required />
+        <input id="phone" placeholder="Phone" />
+        <select id="role">
+          <option value="buyer">Buyer</option>
+          <option value="seller">Seller</option>
+          <option value="agent">Agent</option>
+        </select>
+        <button type="submit">Save</button>
+      </form>
+      <pre id="output"></pre>
+    </div>
+
+    <script>
+      const form = document.getElementById('user-form');
+      const output = document.getElementById('output');
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const payload = {
+          fullName: document.getElementById('fullName').value,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value,
+          role: document.getElementById('role').value,
+        };
+
+        const response = await fetch('/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await response.json();
+        output.textContent = JSON.stringify(data, null, 2);
+      });
+    </script>
   </body>
 </html>

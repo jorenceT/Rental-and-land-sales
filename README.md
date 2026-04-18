@@ -1,57 +1,54 @@
-# Rental & Land Sales - Node API + Angular UI
+# Rental & Land Sales - Initial Application Plan
 
-Yes — for this product, the right architecture is:
+This starter project gives you a practical baseline for a rental and land-sale website using **Node.js + SQL**.
 
-`Angular UI (renderer) → Node.js API server → SQL database`
+## Can we use Node.js + SQL in the renderer?
+Short answer: **do not connect SQL directly from the renderer/browser**.
 
-Do **not** connect SQL directly from browser/renderer code.
+- Browser (renderer) code is public and insecure for DB credentials.
+- SQL must run on a trusted **server layer** (Node.js backend).
+- Frontend should call backend APIs (e.g., `/api/users`) and backend talks to SQL.
 
-## What is included
+## Initial website features (MVP)
+1. **Landing page**
+   - Search rentals / land sales by location and budget
+2. **User registration / lead capture**
+   - Name, email, phone, buyer/seller role
+3. **Listing module**
+   - Add rental or land listing with title, location, price, details
+4. **Admin basic dashboard**
+   - View users and listings
+5. **Contact / inquiry form**
+   - Save interest against a listing
 
-### Backend (Node.js + Express + PostgreSQL)
-- `src/server.js`:
-  - `GET /api/health`
-  - `POST /api/users`
-- `src/db.js`: PostgreSQL connection pool
-- `db/schema.sql`: `users` and `listings` schema
+## How user details are saved (recommended flow)
+1. User submits form in frontend.
+2. Frontend sends HTTPS request to Node API.
+3. Node validates/sanitizes data.
+4. Node stores data in SQL (PostgreSQL/MySQL).
+5. API returns safe response (no sensitive internals).
 
-### Frontend (Angular)
-- `frontend-angular/`: Angular standalone UI with reactive form
-- `frontend-angular/src/app/user-api.service.ts`: API integration to backend
-- `frontend-angular/src/app/app.component.*`: lead form and response rendering
+## Included in this repo
+- `src/server.js`: Express API with endpoint to save users
+- `src/db.js`: PostgreSQL pool connection
+- `db/schema.sql`: tables for users and listings
+- `public/index.html`: simple form posting to backend
+- `.env.example`: environment variables for local setup
 
-## MVP website scope (initial)
-1. Home + search UI for rentals and land listings
-2. Lead capture (name/email/phone/role)
-3. Listing module (rental / land sale)
-4. Inquiry flow for each listing
-5. Basic admin panel (next step)
-
-## How user details are saved
-1. User submits Angular form.
-2. Angular calls `POST /api/users`.
-3. Node server validates and writes to SQL.
-4. Server returns created user record.
-
-## Run backend
+## Quick start
 ```bash
 npm install
 cp .env.example .env
-# Create DB and run db/schema.sql
+# create database: rental_land_sales
+# then run schema SQL in your DB
 npm start
 ```
 
-## Run Angular UI
-```bash
-cd frontend-angular
-npm install
-npm start
-```
-Angular dev server default: `http://localhost:4200`
+Open: `http://localhost:4000`
 
-## Android-ready path (later)
-Because UI is Angular, you can later wrap it using Ionic + Capacitor:
-1. Add Ionic components/screens
-2. Build Angular app
-3. Sync with Capacitor Android project
-4. Open in Android Studio
+## Next recommended improvements
+- JWT authentication + password hashing (`bcrypt`)
+- Role-based access (admin/agent/user)
+- File upload for listing images (S3/Cloudinary)
+- Proper validation library (`zod`/`joi`)
+- Production deployment (Nginx + PM2 + managed PostgreSQL)
